@@ -194,9 +194,26 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
 const activeMenu = ref("home");
+
+// Sync active menu with current route
+watch(
+  () => route.path,
+  (path) => {
+    if (path === "/dashboard") {
+      activeMenu.value = "home";
+    } else if (path === "/profile") {
+      activeMenu.value = "profile";
+    } else if (path.includes("/file-manager")) {
+      activeMenu.value = "files";
+    }
+  },
+  { immediate: true }
+);
 
 defineEmits(["logout"]);
 </script>

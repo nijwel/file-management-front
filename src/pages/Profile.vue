@@ -147,9 +147,9 @@ import { showToast } from "../utils/toast";
 
 const router = useRouter();
 
-const firstName = ref("nijwel");
+const firstName = ref("");
 const lastName = ref("");
-const email = ref("mahadi@gmail.com");
+const email = ref("");
 
 const isLoading = ref(false);
 const errorMessage = ref("");
