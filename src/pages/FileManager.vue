@@ -83,6 +83,21 @@
         <!-- Breadcrumb Navigation -->
         <div class="mb-6 flex items-center gap-2 text-sm">
           <button
+            v-if="currentPath.length > 0"
+            @click="goBack"
+            class="text-gray-600 hover:text-gray-900 font-semibold transition-colors flex items-center gap-1"
+            title="পূর্ববর্তী"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            পিছনে
+          </button>
+          <button
             @click="goToRoot"
             class="text-gray-900 hover:text-gray-600 font-semibold transition-colors"
           >
@@ -116,6 +131,21 @@
               {{ folder.name }}
             </button>
           </span>
+          <div class="ml-auto">
+            <button
+              v-if="currentPath.length > 0"
+              @click="goBack"
+              class="text-gray-600 hover:text-gray-900 font-semibold transition-colors flex items-center gap-1"
+              title="পূর্ববর্তী"
+            >
+              পিছনে
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Actions Toolbar -->
@@ -141,11 +171,11 @@
                 d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
               />
             </svg>
-            ছবি আপলোড করুন
+            ফাইল আপলোড করুন
             <input
               type="file"
+              name="files[]"
               multiple
-              accept="image/*"
               @change="uploadFiles"
               class="hidden"
             />
@@ -196,10 +226,10 @@
             <!-- Folder Card -->
             <div
               v-if="item.type === 'folder'"
-              class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-400 hover:shadow-md transition-all"
+              class="relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-400 hover:shadow-md transition-all"
             >
               <div
-                @click="enterFolder(item)"
+                @dblclick="enterFolder(item)"
                 class="p-6 bg-gradient-to-br from-gray-100 to-gray-200 h-32 flex items-center justify-center cursor-pointer hover:from-gray-200 hover:to-gray-300 transition-colors"
               >
                 <svg
@@ -217,8 +247,49 @@
                   {{ item.name }}
                 </h3>
                 <p class="text-xs text-gray-500 mt-1">
-                  {{ item.children ? item.children.length : 0 }} আইটেম
+                  {{ item.all_children ? item.all_children.length : 0 }} আইটেম
                 </p>
+              </div>
+
+              <!-- Three-dot options (top-right) -->
+              <div class="absolute top-2 right-2 z-40">
+                <button
+                  @click.stop="toggleOptions(item)"
+                  class="p-1 rounded-full bg-white bg-opacity-80 hover:bg-opacity-100 shadow-sm"
+                  title="বিস্তারিত"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-700"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                </button>
+                <div
+                  v-if="openOptionsId === item.id"
+                  class="absolute top-8 right-0 mt-1 bg-white rounded shadow-lg p-1 flex"
+                >
+                  <button
+                    @click.stop="deleteItem(item)"
+                    class="text-red-600 p-2 rounded hover:bg-red-50"
+                    title="ডিলিট করুন"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <!-- Folder Actions (Hover) -->
@@ -226,8 +297,8 @@
                 class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1"
               >
                 <button
-                  @click="renameItem(item, idx)"
-                  class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
+                  @click.stop="renameItem(item)"
+                  class="hover:bg-gray-700 text-gray hover:text-white p-2 rounded"
                   title="রিনেম করুন"
                 >
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -237,8 +308,8 @@
                   </svg>
                 </button>
                 <button
-                  @click="deleteItem(idx, 'folder')"
-                  class="bg-red-600 hover:bg-red-700 text-white p-2 rounded"
+                  @click.stop="deleteItem(item)"
+                  class="hover:bg-red-700 text-white p-2 rounded"
                   title="ডিলিট করুন"
                 >
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -255,16 +326,82 @@
             <!-- Image Card -->
             <div
               v-else
-              class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-400 hover:shadow-md transition-all"
+              class="relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-400 hover:shadow-md transition-all"
             >
               <div
                 class="relative h-32 bg-gray-100 flex items-center justify-center overflow-hidden"
               >
-                <img
-                  :src="item.url"
-                  :alt="item.name"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                />
+                <template
+                  v-if="item.mime_type && item.mime_type.startsWith('image/')"
+                >
+                  <img
+                    :src="item.url"
+                    :alt="item.name"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  />
+                </template>
+                <template v-else>
+                  <div
+                    class="w-full h-full flex items-center justify-center text-gray-400"
+                  >
+                    <svg
+                      v-if="getIconForItem(item) === 'pdf'"
+                      class="w-10 h-10"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6z"
+                      />
+                    </svg>
+                    <svg
+                      v-else-if="getIconForItem(item) === 'json'"
+                      class="w-10 h-10"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm3 5h4v1H8V8zm0 2h4v1H8v-1z"
+                      />
+                    </svg>
+                    <svg
+                      v-else-if="getIconForItem(item) === 'archive'"
+                      class="w-10 h-10"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M3 7a1 1 0 011-1h12a1 1 0 011 1v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7zM8 9h4v2H8V9z"
+                      />
+                    </svg>
+                    <svg
+                      v-else-if="getIconForItem(item) === 'audio'"
+                      class="w-10 h-10"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9 4v8a3 3 0 11-2-2.83V6a1 1 0 112 0zM14 7v6" />
+                    </svg>
+                    <svg
+                      v-else-if="getIconForItem(item) === 'video'"
+                      class="w-10 h-10"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M4 4h12v12H4zM8 7l5 3-5 3V7z" />
+                    </svg>
+                    <svg
+                      v-else
+                      class="w-10 h-10"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M3 7a1 1 0 011-1h12a1 1 0 011 1v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7zM7 9h6v2H7V9z"
+                      />
+                    </svg>
+                  </div>
+                </template>
               </div>
               <div class="p-4">
                 <h3 class="font-semibold text-gray-900 truncate text-sm">
@@ -273,6 +410,47 @@
                 <p class="text-xs text-gray-500 mt-1">
                   {{ (item.size / 1024).toFixed(2) }} KB
                 </p>
+              </div>
+
+              <!-- Three-dot options (top-right) -->
+              <div class="absolute top-2 right-2 z-40">
+                <button
+                  @click.stop="toggleOptions(item)"
+                  class="p-1 rounded-full bg-white bg-opacity-80 hover:bg-opacity-100 shadow-sm"
+                  title="বিস্তারিত"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-700"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                </button>
+                <div
+                  v-if="openOptionsId === item.id"
+                  class="absolute top-8 right-0 mt-1 bg-white rounded shadow-lg p-1 flex"
+                >
+                  <button
+                    @click.stop="deleteItem(item)"
+                    class="text-red-600 p-2 rounded hover:bg-red-50"
+                    title="ডিলিট করুন"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <!-- Image Actions (Hover) -->
@@ -294,7 +472,7 @@
                   </svg>
                 </a>
                 <button
-                  @click="deleteItem(idx, 'file')"
+                  @click.stop="deleteItem(item)"
                   class="bg-red-600 hover:bg-red-700 text-white p-2 rounded"
                   title="ডিলিট করুন"
                 >
@@ -348,7 +526,7 @@
                 class="border-b border-gray-200 hover:bg-gray-50 transition-colors"
               >
                 <td class="px-6 py-4 text-sm">
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2 relative">
                     <div
                       v-if="item.type === 'folder'"
                       class="w-5 h-5 text-gray-400"
@@ -360,7 +538,63 @@
                       </svg>
                     </div>
                     <div v-else class="w-5 h-5 text-gray-400">
-                      <svg fill="currentColor" viewBox="0 0 20 20">
+                      <svg
+                        v-if="getIconForItem(item) === 'image'"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                        />
+                      </svg>
+                      <svg
+                        v-else-if="getIconForItem(item) === 'json'"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm3 5h4v1H8V8zm0 2h4v1H8v-1z"
+                        />
+                      </svg>
+                      <svg
+                        v-else-if="getIconForItem(item) === 'pdf'"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      <svg
+                        v-else-if="getIconForItem(item) === 'archive'"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM4 9a1 1 0 100 2h8a1 1 0 100-2H4z"
+                        />
+                      </svg>
+                      <svg
+                        v-else-if="getIconForItem(item) === 'audio'"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          d="M9 2a1 1 0 000 2 7 7 0 100 14 1 1 0 100-2 5 5 0 110-10 1 1 0 000-2z"
+                        />
+                      </svg>
+                      <svg
+                        v-else-if="getIconForItem(item) === 'video'"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm13 4V8m0 4v-2m4-4a1 1 0 00-1.82-.5l-3.5 5.25-1.5-2.25a1 1 0 00-1.82.5"
+                        />
+                      </svg>
+                      <svg v-else fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fill-rule="evenodd"
                           d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
@@ -371,10 +605,50 @@
                     <span class="font-medium text-gray-900">{{
                       item.name
                     }}</span>
+                    <div class="ml-auto relative">
+                      <button
+                        @click.stop="toggleOptions(item)"
+                        class="p-1 rounded hover:bg-gray-100"
+                        title="বিস্তারিত"
+                      >
+                        <svg
+                          class="w-4 h-4 text-gray-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        v-if="openOptionsId === item.id"
+                        class="absolute right-0 mt-2 bg-white shadow rounded p-1 z-50"
+                      >
+                        <button
+                          @click.stop="deleteItem(item)"
+                          class="text-red-600 p-1 rounded hover:bg-red-50 flex items-center gap-1"
+                          title="ডিলিট করুন"
+                        >
+                          <svg
+                            class="w-4 h-4"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          ডিলিট
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </td>
                 <td class="px-6 py-4 text-sm text-gray-600">
-                  {{ item.type === "folder" ? "ফোল্ডার" : "ইমেজ" }}
+                  {{ item.type === "folder" ? "ফোল্ডার" : "ফাইল" }}
                 </td>
                 <td class="px-6 py-4 text-sm text-gray-600">
                   {{
@@ -386,13 +660,13 @@
                 <td class="px-6 py-4 text-sm text-right">
                   <div class="flex gap-2 justify-end">
                     <button
-                      @click="renameItem(item, idx)"
+                      @click.stop="renameItem(item)"
                       class="text-blue-600 hover:text-blue-700 font-medium"
                     >
                       রিনেম
                     </button>
                     <button
-                      @click="deleteItem(idx, item.type)"
+                      @click.stop="deleteItem(item)"
                       class="text-red-600 hover:text-red-700 font-medium"
                     >
                       ডিলিট
@@ -526,7 +800,7 @@
           class="fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200 w-48 py-1"
         >
           <button
-            @click="renameItem(contextMenuItem, contextMenuIndex)"
+            @click.stop="renameItem(contextMenuItem)"
             class="w-full text-left px-4 py-2 hover:bg-gray-50 text-gray-700 text-sm flex items-center gap-2"
           >
             <svg
@@ -545,7 +819,7 @@
             নাম পরিবর্তন
           </button>
           <button
-            @click="deleteItem(contextMenuIndex, contextMenuItem.type)"
+            @click.stop="deleteItem(contextMenuItem)"
             class="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 text-sm flex items-center gap-2"
           >
             <svg
@@ -570,213 +844,416 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import api from "../utils/axios";
 import Sidebar from "../components/Sidebar.vue";
+import { showToast } from "../utils/toast";
 
-const folders = ref([]);
-const currentPathIndices = ref([]);
+// State
+const foldersList = ref([]); // folders in current folder
+const filesList = ref([]); // files in current folder
+const breadcrumb = ref([]); // array of folder objects (breadcrumb)
+const currentFolderId = ref(null); // null means root
+
 const showCreateFolderModal = ref(false);
 const showRenameModal = ref(false);
 const newFolderName = ref("");
 const renamingValue = ref("");
+const renamingItem = ref(null);
 const searchQuery = ref("");
 const viewMode = ref("grid");
 const sortBy = ref("name");
-let renamingItemIdx = null;
+const showContextMenu = ref(false);
+const contextMenuX = ref(0);
+const contextMenuY = ref(0);
+const contextMenuItem = ref(null);
+const contextMenuIndex = ref(0);
 
-// Get current folder
-const getCurrentFolder = () => {
-  let current = { children: folders };
-  for (const idx of currentPathIndices.value) {
-    current = current.children[idx];
-  }
-  return current;
+// Options menu for individual items (three-dot menu)
+const openOptionsId = ref(null);
+
+const toggleOptions = (item) => {
+  openOptionsId.value = openOptionsId.value === item.id ? null : item.id;
 };
 
-// Get current items
-const currentItems = computed(() => {
-  const folder = getCurrentFolder();
-  return folder.children || [];
+// Load folders and files for a folder id (null => root)
+const loadItems = async (folderId = null) => {
+  currentFolderId.value = folderId;
+  try {
+    // Root listing returns both folders and rootFiles under result
+    if (folderId === null) {
+      const res = await api.get("/api/user/folders");
+      const data = res.data?.result || res.data;
+      const foldersData =
+        data?.folders?.data || data?.data || data?.folders || [];
+      foldersList.value = foldersData || [];
+
+      const rawFiles = data?.rootFiles || [];
+      const base = api.defaults.baseURL
+        ? api.defaults.baseURL.replace(/\/$/, "")
+        : "";
+      filesList.value = rawFiles.map((f) => ({
+        ...f,
+        name: f.original_name || f.file_name || f.file_path || "",
+        url: f.file_path ? (base ? base + "/" + f.file_path : f.file_path) : "",
+      }));
+    } else {
+      // Specific folder endpoint returns all_children and files
+      const res = await api.get(`/api/user/folders/${folderId}`);
+      const folderData = res.data?.result || res.data;
+      foldersList.value = folderData.all_children || [];
+      const rawFiles = folderData.files || [];
+      const base = api.defaults.baseURL
+        ? api.defaults.baseURL.replace(/\/$/, "")
+        : "";
+      filesList.value = rawFiles.map((f) => ({
+        ...f,
+        name: f.original_name || f.file_name || f.file_path || "",
+        url: f.file_path ? (base ? base + "/" + f.file_path : f.file_path) : "",
+      }));
+    }
+
+    console.debug("Loaded folders:", foldersList.value);
+    console.debug("Loaded files:", filesList.value);
+  } catch (err) {
+    console.error("Failed to load items:", err);
+    showToast({
+      title: "ত্রুটি",
+      message: "আইটেম লোড করতে ব্যর্থ হয়েছে",
+      type: "error",
+    });
+  }
+};
+
+onMounted(() => {
+  loadItems(null);
 });
 
-// Filtered items
-const filteredItems = computed(() => {
-  let items = currentItems.value;
+// Combined current items for the template
+const currentItems = computed(() => {
+  const folders = foldersList.value.map((f) => ({ ...f, type: "folder" }));
+  const files = filesList.value.map((f) => ({ ...f, type: "file" }));
+  return [...folders, ...files];
+});
 
-  // Search
+const filteredItems = computed(() => {
+  let items = currentItems.value.slice();
   if (searchQuery.value) {
     items = items.filter((item) =>
       item.name.toLowerCase().includes(searchQuery.value.toLowerCase()),
     );
   }
-
-  // Sort
-  if (sortBy.value === "name") {
+  if (sortBy.value === "name")
     items.sort((a, b) => a.name.localeCompare(b.name));
-  } else {
-    items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-  }
-
+  else items.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
   return items;
 });
 
-// Get current path
-const currentPath = computed(() => {
-  let current = { children: folders, name: "হোম" };
-  const path = [];
-  for (const idx of currentPathIndices.value) {
-    current = current.children[idx];
-    path.push(current);
-  }
-  return path;
-});
+const currentPath = computed(() => breadcrumb.value);
 
-// Calculate stats
-const totalFiles = computed(() => {
-  let count = 0;
-  const countFiles = (items) => {
-    items?.forEach((item) => {
-      if (item.type === "file") count++;
-      else countFiles(item.children);
-    });
-  };
-  countFiles(folders.value);
-  return count;
-});
-
-const totalFolders = computed(() => {
-  let count = 0;
-  const countFolders = (items) => {
-    items?.forEach((item) => {
-      if (item.type === "folder") {
-        count++;
-        countFolders(item.children);
-      }
-    });
-  };
-  countFolders(folders.value);
-  return count;
-});
-
+const totalFiles = computed(() => filesList.value.length);
+const totalFolders = computed(() => foldersList.value.length);
 const totalSize = computed(() => {
-  let size = 0;
-  const calculateSize = (items) => {
-    items?.forEach((item) => {
-      if (item.type === "file") size += item.size || 0;
-      else calculateSize(item.children);
-    });
-  };
-  calculateSize(folders.value);
+  const size = filesList.value.reduce((s, f) => s + (f.size || 0), 0);
   return (size / (1024 * 1024)).toFixed(2) + " MB";
 });
 
+// Navigation
+const enterFolder = async (folder) => {
+  try {
+    breadcrumb.value.push(folder);
+    currentFolderId.value = folder.id;
+
+    // Fetch folder detail which includes all_children and files
+    const res = await api.get(`/api/user/folders/${folder.id}`);
+    const folderData = res.data?.result || res.data;
+
+    foldersList.value = folderData.all_children || [];
+    const rawFiles = folderData.files || [];
+    const base = api.defaults.baseURL
+      ? api.defaults.baseURL.replace(/\/$/, "")
+      : "";
+    filesList.value = rawFiles.map((f) => ({
+      ...f,
+      name: f.original_name || f.file_name || f.file_path || "",
+      url: f.file_path ? (base ? base + "/" + f.file_path : f.file_path) : "",
+    }));
+    console.debug(
+      "Entered folder:",
+      folder.id,
+      foldersList.value,
+      filesList.value,
+    );
+  } catch (err) {
+    console.error("Failed to enter folder:", err);
+    showToast({
+      title: "ত্রুটি",
+      message: "ফোল্ডার খোলা যায়নি",
+      type: "error",
+    });
+    breadcrumb.value.pop();
+  }
+};
+
+const goToRoot = async () => {
+  breadcrumb.value = [];
+  await loadItems(null);
+};
+
+const goBack = async () => {
+  if (breadcrumb.value.length > 0) {
+    // close any open per-item options
+    openOptionsId.value = null;
+
+    breadcrumb.value.pop();
+    if (breadcrumb.value.length > 0) {
+      const parent = breadcrumb.value[breadcrumb.value.length - 1];
+      currentFolderId.value = parent.id;
+      try {
+        const res = await api.get(`/api/user/folders/${parent.id}`);
+        const folderData = res.data?.result || res.data;
+        foldersList.value = folderData.all_children || [];
+        const rawFiles = folderData.files || [];
+        const base = api.defaults.baseURL
+          ? api.defaults.baseURL.replace(/\/$/, "")
+          : "";
+        filesList.value = rawFiles.map((f) => ({
+          ...f,
+          name: f.original_name || f.file_name || f.file_path || "",
+          url: f.file_path
+            ? base
+              ? base + "/" + f.file_path
+              : f.file_path
+            : "",
+        }));
+      } catch (err) {
+        console.error("Failed to go back:", err);
+        showToast({
+          title: "ত্রুটি",
+          message: "পিছনে যেতে সমস্যা হয়েছে",
+          type: "error",
+        });
+      }
+    } else {
+      await goToRoot();
+    }
+  }
+};
+
+const goToFolder = async (idx) => {
+  const target = breadcrumb.value[idx];
+  breadcrumb.value = breadcrumb.value.slice(0, idx + 1);
+
+  try {
+    currentFolderId.value = target.id;
+    const res = await api.get(`/api/user/folders/${target.id}`);
+    const folderData = res.data?.result || res.data;
+
+    foldersList.value = folderData.all_children || [];
+    const rawFiles = folderData.files || [];
+    const base = api.defaults.baseURL
+      ? api.defaults.baseURL.replace(/\/$/, "")
+      : "";
+    filesList.value = rawFiles.map((f) => ({
+      ...f,
+      name: f.original_name || f.file_name || f.file_path || "",
+      url: f.file_path ? (base ? base + "/" + f.file_path : f.file_path) : "",
+    }));
+  } catch (err) {
+    console.error("Failed to load folder:", err);
+    showToast({
+      title: "ত্রুটি",
+      message: "ফোল্ডার লোড করা যায়নি",
+      type: "error",
+    });
+  }
+};
+
 // Create folder
-const createFolder = () => {
+const createFolder = async () => {
   if (!newFolderName.value.trim()) {
-    alert("ফোল্ডারের নাম লিখুন");
+    showToast({
+      title: "ত্রুটি",
+      message: "ফোল্ডারের নাম লিখুন",
+      type: "error",
+    });
     return;
   }
-
-  const newFolder = {
-    type: "folder",
-    name: newFolderName.value,
-    children: [],
-    createdAt: Date.now(),
-  };
-
-  const current = getCurrentFolder();
-  if (!current.children) current.children = [];
-  current.children.push(newFolder);
-
-  newFolderName.value = "";
-  showCreateFolderModal.value = false;
-};
-
-// Enter folder
-const enterFolder = (folder) => {
-  const current = getCurrentFolder();
-  const idx = current.children.indexOf(folder);
-  if (idx !== -1) {
-    currentPathIndices.value.push(idx);
+  try {
+    const payload = { name: newFolderName.value };
+    if (currentFolderId.value) payload.parent_id = currentFolderId.value;
+    const res = await api.post("/api/user/folders", payload);
+    showToast({
+      title: "সফল",
+      message: "ফোল্ডার তৈরি হয়েছে",
+      type: "success",
+    });
+    showCreateFolderModal.value = false;
+    newFolderName.value = "";
+    await loadItems(currentFolderId.value);
+  } catch (err) {
+    console.error("Create folder failed:", err);
+    showToast({
+      title: "ত্রুটি",
+      message: "ফোল্ডার তৈরি করা যায়নি",
+      type: "error",
+    });
   }
 };
 
-// Go back to root
-const goToRoot = () => {
-  currentPathIndices.value = [];
+// Helper: Get file type icon based on MIME type
+const getFileIcon = (mimeType) => {
+  if (!mimeType) return "file";
+  if (mimeType.startsWith("image/")) return "image";
+  if (mimeType.startsWith("video/")) return "video";
+  if (mimeType.includes("pdf")) return "pdf";
+  if (mimeType.includes("zip") || mimeType.includes("archive"))
+    return "archive";
+  if (mimeType.includes("word")) return "doc";
+  if (mimeType.includes("sheet") || mimeType.includes("excel")) return "sheet";
+  if (mimeType.startsWith("audio/")) return "audio";
+  return "file";
 };
 
-// Go to specific folder
-const goToFolder = (idx) => {
-  currentPathIndices.value = currentPathIndices.value.slice(0, idx);
+// Prefer explicit file_icon property, then mime type, then filename extension
+const getIconForItem = (item) => {
+  if (!item) return "file";
+  if (item.file_icon) return item.file_icon; // backend-provided hint like 'json', 'zip'
+  const mime = item.mime_type || "";
+  if (mime.includes("json")) return "json";
+  if (mime.startsWith("image/")) return "image";
+  if (mime.startsWith("video/")) return "video";
+  if (mime.includes("pdf")) return "pdf";
+  if (mime.includes("zip") || mime.includes("archive")) return "archive";
+  if (mime.startsWith("audio/")) return "audio";
+  if (
+    mime.includes("word") ||
+    (item.name || "").toLowerCase().endsWith(".doc") ||
+    (item.name || "").toLowerCase().endsWith(".docx")
+  )
+    return "doc";
+  if (
+    mime.includes("excel") ||
+    (item.name || "").toLowerCase().endsWith(".xls") ||
+    (item.name || "").toLowerCase().endsWith(".xlsx")
+  )
+    return "sheet";
+  const name = (item.name || item.file_name || "").toLowerCase();
+  if (name.endsWith(".json")) return "json";
+  if (name.endsWith(".zip") || name.endsWith(".rar") || name.endsWith(".7z"))
+    return "archive";
+  return "file";
 };
 
 // Upload files
-const uploadFiles = (event) => {
-  const files = Array.from(event.target.files);
-  const current = getCurrentFolder();
-  if (!current.children) current.children = [];
-
-  files.forEach((file) => {
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        current.children.push({
-          type: "file",
-          name: file.name,
-          url: e.target.result,
-          size: file.size,
-          createdAt: Date.now(),
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  // Reset input
-  event.target.value = "";
+const uploadFiles = async (event) => {
+  const files = Array.from(event.target.files || []);
+  if (!files.length) return;
+  const fd = new FormData();
+  files.forEach((f) => fd.append("files[]", f));
+  if (currentFolderId.value) {
+    fd.append("folder_id", currentFolderId.value);
+  }
+  console.debug(
+    "Uploading files to folder:",
+    currentFolderId.value,
+    "Files:",
+    files,
+  );
+  // Log FormData entries for debugging (file objects will be File)
+  for (const entry of fd.entries()) {
+    const [k, v] = entry;
+    if (v instanceof File)
+      console.debug("FormData entry:", k, v.name, v.type, v.size);
+    else console.debug("FormData entry:", k, v);
+  }
+  try {
+    // Do not set Content-Type header manually; let the browser set the boundary
+    await api.post("/api/user/files", fd);
+    showToast({ title: "সফল", message: "ফাইল আপলোড হয়েছে", type: "success" });
+    await loadItems(currentFolderId.value);
+  } catch (err) {
+    console.error("Upload failed:", err);
+    showToast({
+      title: "ত্রুটি",
+      message: "ফাইল আপলোড করতে ব্যর্থ হয়েছে",
+      type: "error",
+    });
+  } finally {
+    event.target.value = "";
+  }
 };
 
-// Rename item
-const renameItem = (item, idx) => {
+// Rename
+const renameItem = (item) => {
+  renamingItem.value = item;
   renamingValue.value = item.name;
-  renamingItemIdx = idx;
   showRenameModal.value = true;
 };
 
-// Confirm rename
-const confirmRename = () => {
+const confirmRename = async () => {
   if (!renamingValue.value.trim()) {
-    alert("নাম লিখুন");
+    showToast({ title: "ত্রুটি", message: "নাম লিখুন", type: "error" });
     return;
   }
-
-  const current = getCurrentFolder();
-  current.children[renamingItemIdx].name = renamingValue.value;
-  showRenameModal.value = false;
-  renamingValue.value = "";
-};
-
-// Delete item
-const deleteItem = (idx, type) => {
-  if (confirm(`এই ${type === "folder" ? "ফোল্ডার" : "ফাইল"} ডিলিট করতে চান?`)) {
-    const current = getCurrentFolder();
-    current.children.splice(idx, 1);
+  try {
+    const item = renamingItem.value;
+    if (item.type === "folder") {
+      await api.put(`/api/user/folders/${item.id}`, {
+        name: renamingValue.value,
+      });
+    } else {
+      await api.put(`/api/user/files/${item.id}`, {
+        original_name: renamingValue.value,
+      });
+    }
+    showToast({
+      title: "সফল",
+      message: "নাম পরিবর্তন হয়েছে",
+      type: "success",
+    });
+    showRenameModal.value = false;
+    renamingValue.value = "";
+    renamingItem.value = null;
+    await loadItems(currentFolderId.value);
+  } catch (err) {
+    console.error("Rename failed:", err);
+    showToast({
+      title: "ত্রুটি",
+      message: "নাম পরিবর্তন করা যায়নি",
+      type: "error",
+    });
   }
 };
 
-// Toggle upload area
-const toggleUploadArea = () => {
-  // Placeholder for future upload area UI
-  console.log("Upload area toggled");
+// Delete
+const deleteItem = async (idxOrItem, typeOrType) => {
+  const item = typeof idxOrItem === "object" ? idxOrItem : null;
+  const type = item ? item.type : typeOrType;
+  const confirmMsg = `এই ${type === "folder" ? "ফোল্ডার" : "ফাইল"} ডিলিট করতে চান?`;
+  if (!confirm(confirmMsg)) return;
+  try {
+    const id = item ? item.id : null;
+    if (!id) return;
+    if (type === "folder") await api.delete(`/api/user/folders/${id}`);
+    else await api.delete(`/api/user/files/${id}`);
+    showToast({ title: "সফল", message: "আইটেম ডিলিট হয়েছে", type: "success" });
+    await loadItems(currentFolderId.value);
+  } catch (err) {
+    console.error("Delete failed:", err);
+    showToast({ title: "ত্রুটি", message: "ডিলিট করা যায়নি", type: "error" });
+  }
 };
 
+// Simple logout
 const router = useRouter();
-
 const logout = async () => {
-  await api.post("/api/auth/logout");
+  try {
+    await api.post("/api/auth/logout");
+  } catch (e) {
+    // ignore
+  }
   localStorage.removeItem("token");
   router.push("/");
 };

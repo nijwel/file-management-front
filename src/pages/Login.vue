@@ -144,9 +144,12 @@
         <!-- Sign Up Link -->
         <div class="text-center text-sm text-gray-600">
           অ্যাকাউন্ট নেই?
-          <a href="#" class="font-semibold text-gray-900 hover:text-gray-700">
+          <router-link
+            to="/register"
+            class="font-semibold text-gray-900 hover:text-gray-700"
+          >
             এখনই সাইন আপ করুন
-          </a>
+          </router-link>
         </div>
       </div>
 

@@ -4,12 +4,33 @@ import Dashboard from "../pages/Dashboard.vue";
 import FileManager from "../pages/FileManager.vue";
 import ResetPassword from "../pages/ResetPassword.vue";
 import Profile from "../pages/Profile.vue";
+import EmailVerification from "../pages/auth/EmailVerification.vue";
 
 const routes = [
-  { path: "/", component: Login },
+  {
+    path: "/",
+    component: Login,
+    meta: { title: "লগইন" },
+  },
+  {
+    path: "/register",
+    component: () => import("../pages/auth/Register.vue"),
+    meta: { title: "নতুন অ্যাকাউন্ট তৈরি করুন" },
+  },
   {
     path: "/login/reset-password",
     component: ResetPassword,
+    meta: { title: "পাসওয়ার্ড রিসেট" },
+  },
+  {
+    path: "/verify-email",
+    component: EmailVerification,
+    props: (route) => ({
+      token: route.query.token,
+      email: route.query.email,
+    }),
+    meta: { title: "ইমেইল ভেরিফিকেশন" },
+    alias: "/email/verification",
   },
   {
     path: "/dashboard",
