@@ -32,7 +32,7 @@
             <div
               class="bg-white rounded-xl border border-gray-200 p-6 space-y-6"
             >
-              <div
+              <!-- <div
                 v-if="errorMessage"
                 class="p-4 bg-red-50 border border-red-200 rounded-lg"
               >
@@ -47,7 +47,7 @@
                 <p class="text-green-700 text-sm font-medium">
                   {{ successMessage }}
                 </p>
-              </div>
+              </div> -->
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -194,7 +194,7 @@ const updateProfile = async () => {
 
   isLoading.value = true;
   try {
-    const res = await api.put("/api/admin/profile", {
+    const res = await api.post("/api/admin/profile", {
       first_name: firstName.value,
       last_name: lastName.value,
       email: email.value,
