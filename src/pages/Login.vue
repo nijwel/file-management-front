@@ -247,6 +247,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "../utils/axios";
+import { showToast } from "../utils/toast";
 
 const email = ref("admin@gmail.com");
 const password = ref("12345678");
@@ -273,7 +274,11 @@ const login = async () => {
       router.push("/dashboard");
     }
   } catch (err) {
-    alert("লগইন ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
+    showToast({
+      title: "লগইন ব্যর্থ",
+      message: "অনুগ্রহ করে ইমেইল/পাসওয়ার্ড যাচাই করুন এবং আবার চেষ্টা করুন।",
+      type: "error",
+    });
   } finally {
     isLoading.value = false;
   }
@@ -304,11 +309,23 @@ const sendResetEmail = async () => {
         showForgotModal.value = false;
         forgotSuccess.value = false;
       }, 3000);
+      showToast({
+        title: "সফল",
+        message: "রিসেট লিংক ইমেইলে পাঠানো হয়েছে।",
+        type: "success",
+      });
     }
   } catch (err) {
     forgotError.value =
       err.response?.data?.message ||
       "ইমেইল পাঠাতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।";
+    showToast({
+      title: "ত্রুটি",
+      message:
+        err.response?.data?.message ||
+        "ইমেইল পাঠাতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      type: "error",
+    });
   } finally {
     forgotLoading.value = false;
   }

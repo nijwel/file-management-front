@@ -153,6 +153,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import api from "../utils/axios";
+import { showToast } from "../utils/toast";
 
 const router = useRouter();
 const route = useRoute();
@@ -205,16 +206,31 @@ const resetPassword = async () => {
   // Validate passwords
   if (!newPassword.value || !confirmPassword.value) {
     errorMessage.value = "সব ফিল্ড পূরণ করুন।";
+    showToast({
+      title: "ভ্যালিডেশন ত্রুটি",
+      message: "সব ফিল্ড পূরণ করুন।",
+      type: "error",
+    });
     return;
   }
 
   if (newPassword.value.length < 8) {
     errorMessage.value = "পাসওয়ার্ড কমপক্ষে ৮ ক্যারেক্টার হতে হবে।";
+    showToast({
+      title: "ভ্যালিডেশন ত্রুটি",
+      message: "পাসওয়ার্ড কমপক্ষে ৮ ক্যারেক্টার হতে হবে।",
+      type: "error",
+    });
     return;
   }
 
   if (!passwordsMatch.value) {
     errorMessage.value = "পাসওয়ার্ড মিলছে না।";
+    showToast({
+      title: "ভ্যালিডেশন ত্রুটি",
+      message: "পাসওয়ার্ড মিলছে না।",
+      type: "error",
+    });
     return;
   }
 
@@ -230,6 +246,11 @@ const resetPassword = async () => {
     if (res.status === 200) {
       successMessage.value =
         "✓ পাসওয়ার্ড সফলভাবে আপডেট হয়েছে। এখন আপনি নতুন পাসওয়ার্ড দিয়ে লগইন করতে পারবেন।";
+      showToast({
+        title: "সফল",
+        message: "পাসওয়ার্ড সফলভাবে আপডেট হয়েছে।",
+        type: "success",
+      });
 
       // Countdown and redirect
       const countdownInterval = setInterval(() => {
@@ -245,6 +266,13 @@ const resetPassword = async () => {
       err.response?.data?.message ||
       "পাসওয়ার্ড রিসেট করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।";
     console.error("Reset password error:", err);
+    showToast({
+      title: "ত্রুটি",
+      message:
+        err.response?.data?.message ||
+        "পাসওয়ার্ড রিসেট করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      type: "error",
+    });
   } finally {
     isLoading.value = false;
   }
