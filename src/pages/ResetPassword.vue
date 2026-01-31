@@ -30,9 +30,9 @@
           </svg>
         </div>
         <h1 class="text-3xl font-bold text-white mb-2">
-          পাসওয়ার্ড রিসেট করুন
+          Reset Password
         </h1>
-        <p class="text-gray-400">নতুন পাসওয়ার্ড সেট করুন এবং আবার লগইন করুন</p>
+        <p class="text-gray-400">Set a new password and log in again</p>
       </div>
 
       <!-- Reset Form Card -->
@@ -52,20 +52,20 @@
         >
           <p class="text-green-700 text-sm font-medium">{{ successMessage }}</p>
           <p class="text-green-600 text-xs mt-2">
-            {{ countdownSeconds }} সেকেন্ড পরে লগইন পেজে যাবেন...
+            Redirecting to login in {{ countdownSeconds }} seconds...
           </p>
         </div>
 
         <!-- Email Display -->
         <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <p class="text-gray-600 text-sm font-semibold mb-1">ইমেইল</p>
+          <p class="text-gray-600 text-sm font-semibold mb-1">Email</p>
           <p class="text-gray-900 font-medium">{{ emailAddress }}</p>
         </div>
 
         <!-- New Password Input -->
         <div>
           <label class="block text-sm font-semibold text-gray-900 mb-2">
-            নতুন পাসওয়ার্ড
+            New password
           </label>
           <input
             v-model.trim="newPassword"
@@ -73,13 +73,13 @@
             placeholder="••••••••"
             class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
           />
-          <p class="text-gray-500 text-xs mt-1">কমপক্ষে ৮ ক্যারেক্টার</p>
+          <p class="text-gray-500 text-xs mt-1">At least 8 characters</p>
         </div>
 
         <!-- Confirm Password Input -->
         <div>
           <label class="block text-sm font-semibold text-gray-900 mb-2">
-            পাসওয়ার্ড নিশ্চিত করুন
+            Confirm password
           </label>
           <input
             v-model.trim="confirmPassword"
@@ -106,7 +106,7 @@
               passwordsMatch ? 'text-green-600' : 'text-red-600',
             ]"
           >
-            {{ passwordsMatch ? "পাসওয়ার্ড মিলছে ✓" : "পাসওয়ার্ড মিলছে না" }}
+            {{ passwordsMatch ? "Passwords match ✓" : "Passwords do not match" }}
           </p>
         </div>
 
@@ -126,8 +126,8 @@
               d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
             />
           </svg>
-          <span v-if="isLoading">প্রক্রিয়া চলছে...</span>
-          <span v-else>পাসওয়ার্ড আপডেট করুন</span>
+          <span v-if="isLoading">Processing...</span>
+          <span v-else>Update password</span>
         </button>
 
         <!-- Back to Login Link -->
@@ -136,14 +136,14 @@
             to="/"
             class="text-gray-900 hover:text-gray-700 font-medium"
           >
-            ← লগইন পেজে ফিরুন
+            ← Back to login
           </router-link>
         </div>
       </div>
 
       <!-- Footer -->
       <div class="mt-8 text-center text-sm text-gray-400">
-        <p>আপনার নতুন পাসওয়ার্ড সুরক্ষিত রাখুন।</p>
+        <p>Keep your new password secure.</p>
       </div>
     </div>
   </div>
@@ -195,7 +195,7 @@ onMounted(() => {
 
   // Validate required parameters
   if (!tokenParam.value || !emailAddress.value) {
-    errorMessage.value = "অবৈধ রিসেট লিংক। অনুগ্রহ করে আবার চেষ্টা করুন।";
+    errorMessage.value = "Invalid reset link. Please try again.";
   }
 });
 
@@ -205,30 +205,30 @@ const resetPassword = async () => {
 
   // Validate passwords
   if (!newPassword.value || !confirmPassword.value) {
-    errorMessage.value = "সব ফিল্ড পূরণ করুন।";
+    errorMessage.value = "Please fill in all fields.";
     showToast({
-      title: "ভ্যালিডেশন ত্রুটি",
-      message: "সব ফিল্ড পূরণ করুন।",
+      title: "Validation error",
+      message: "Please fill in all fields.",
       type: "error",
     });
     return;
   }
 
   if (newPassword.value.length < 8) {
-    errorMessage.value = "পাসওয়ার্ড কমপক্ষে ৮ ক্যারেক্টার হতে হবে।";
+    errorMessage.value = "Password must be at least 8 characters.";
     showToast({
-      title: "ভ্যালিডেশন ত্রুটি",
-      message: "পাসওয়ার্ড কমপক্ষে ৮ ক্যারেক্টার হতে হবে।",
+      title: "Validation error",
+      message: "Password must be at least 8 characters.",
       type: "error",
     });
     return;
   }
 
   if (!passwordsMatch.value) {
-    errorMessage.value = "পাসওয়ার্ড মিলছে না।";
+    errorMessage.value = "Passwords do not match.";
     showToast({
-      title: "ভ্যালিডেশন ত্রুটি",
-      message: "পাসওয়ার্ড মিলছে না।",
+      title: "Validation error",
+      message: "Passwords do not match.",
       type: "error",
     });
     return;
@@ -245,10 +245,10 @@ const resetPassword = async () => {
 
     if (res.status === 200) {
       successMessage.value =
-        "✓ পাসওয়ার্ড সফলভাবে আপডেট হয়েছে। এখন আপনি নতুন পাসওয়ার্ড দিয়ে লগইন করতে পারবেন।";
+        "✓ Password updated successfully. You can now log in with your new password.";
       showToast({
-        title: "সফল",
-        message: "পাসওয়ার্ড সফলভাবে আপডেট হয়েছে।",
+        title: "Success",
+        message: "Password updated successfully.",
         type: "success",
       });
 
@@ -264,13 +264,13 @@ const resetPassword = async () => {
   } catch (err) {
     errorMessage.value =
       err.response?.data?.message ||
-      "পাসওয়ার্ড রিসেট করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।";
+      "Failed to reset password. Please try again.";
     console.error("Reset password error:", err);
     showToast({
-      title: "ত্রুটি",
+      title: "Error",
       message:
         err.response?.data?.message ||
-        "পাসওয়ার্ড রিসেট করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        "Failed to reset password. Please try again.",
       type: "error",
     });
   } finally {

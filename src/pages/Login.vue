@@ -29,8 +29,8 @@
             />
           </svg>
         </div>
-        <h1 class="text-3xl font-bold text-white mb-2">আপনার অ্যাকাউন্ট</h1>
-        <p class="text-gray-400">ফাইল ম্যানেজমেন্ট সিস্টেমে লগইন করুন</p>
+        <h1 class="text-3xl font-bold text-white mb-2">Your Account</h1>
+        <p class="text-gray-400">Log in to the file management system</p>
       </div>
 
       <!-- Login Form Card -->
@@ -38,7 +38,7 @@
         <!-- Email Input -->
         <div>
           <label class="block text-sm font-semibold text-gray-900 mb-2">
-            ইমেইল
+            Email
           </label>
           <input
             v-model="email"
@@ -51,7 +51,7 @@
         <!-- Password Input -->
         <div>
           <label class="block text-sm font-semibold text-gray-900 mb-2">
-            পাসওয়ার্ড
+            Password
           </label>
           <input
             v-model="password"
@@ -68,14 +68,14 @@
               type="checkbox"
               class="w-4 h-4 border border-gray-300 rounded"
             />
-            <span class="text-gray-700">মনে রাখুন</span>
+            <span class="text-gray-700">Remember me</span>
           </label>
           <button
             @click="showForgotModal = true"
             type="button"
             class="text-gray-900 hover:text-gray-700 font-medium"
           >
-            পাসওয়ার্ড ভুলেছেন?
+            Forgot password?
           </button>
         </div>
 
@@ -96,8 +96,8 @@
               clip-rule="evenodd"
             />
           </svg>
-          <span v-if="isLoading">লোড হচ্ছে...</span>
-          <span v-else>লগইন করুন</span>
+          <span v-if="isLoading">Loading...</span>
+          <span v-else>Log in</span>
         </button>
 
         <!-- Divider -->
@@ -106,7 +106,7 @@
             <div class="w-full border-t border-gray-300"></div>
           </div>
           <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-600">অথবা</span>
+            <span class="px-2 bg-white text-gray-600">or</span>
           </div>
         </div>
 
@@ -143,19 +143,19 @@
 
         <!-- Sign Up Link -->
         <div class="text-center text-sm text-gray-600">
-          অ্যাকাউন্ট নেই?
+          Don’t have an account?
           <router-link
             to="/register"
             class="font-semibold text-gray-900 hover:text-gray-700"
           >
-            এখনই সাইন আপ করুন
+            Sign up now
           </router-link>
         </div>
       </div>
 
       <!-- Footer -->
       <div class="mt-8 text-center text-sm text-gray-400">
-        <p>নিরাপদ লগইন। আপনার ডেটা সুরক্ষিত।</p>
+        <p>Secure login. Your data is protected.</p>
       </div>
     </div>
 
@@ -185,17 +185,17 @@
 
         <div class="mb-6">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">
-            পাসওয়ার্ড রিসেট করুন
+            Reset Password
           </h2>
           <p class="text-gray-600 text-sm">
-            আপনার রেজিস্টার করা ইমেইল এ একটি রিসেট লিংক পাবেন।
+            You will receive a reset link at your registered email.
           </p>
         </div>
 
         <!-- Email Input -->
         <div class="mb-6">
           <label class="block text-sm font-semibold text-gray-900 mb-2">
-            ইমেইল ঠিকানা
+            Email address
           </label>
           <input
             v-model="forgotEmail"
@@ -212,15 +212,15 @@
             type="button"
             class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-3 rounded-lg transition-colors"
           >
-            বাতিল
+            Cancel
           </button>
           <button
             @click="sendResetEmail"
             type="button"
             class="flex-1 bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
-            <span v-if="forgotLoading">পাঠাচ্ছে...</span>
-            <span v-else>লিংক পাঠান</span>
+            <span v-if="forgotLoading">Sending...</span>
+            <span v-else>Send link</span>
           </button>
         </div>
 
@@ -230,7 +230,7 @@
           class="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg"
         >
           <p class="text-green-700 text-sm font-medium">
-            ✓ ইমেইল সফলভাবে পাঠানো হয়েছে। আপনার ইনবক্স চেক করুন।
+            ✓ Email sent successfully. Please check your inbox.
           </p>
         </div>
 
@@ -278,8 +278,8 @@ const login = async () => {
     }
   } catch (err) {
     showToast({
-      title: "লগইন ব্যর্থ",
-      message: "অনুগ্রহ করে ইমেইল/পাসওয়ার্ড যাচাই করুন এবং আবার চেষ্টা করুন।",
+      title: "Login failed",
+      message: "Please check email/password and try again.",
       type: "error",
     });
   } finally {
@@ -293,7 +293,7 @@ const sendResetEmail = async () => {
   forgotSuccess.value = false;
 
   if (!forgotEmail.value) {
-    forgotError.value = "অনুগ্রহ করে ইমেইল ঠিকানা প্রবেশ করুন।";
+    forgotError.value = "Please enter your email address.";
     return;
   }
 
@@ -313,20 +313,20 @@ const sendResetEmail = async () => {
         forgotSuccess.value = false;
       }, 3000);
       showToast({
-        title: "সফল",
-        message: "রিসেট লিংক ইমেইলে পাঠানো হয়েছে।",
+        title: "Success",
+        message: "Reset link has been sent to your email.",
         type: "success",
       });
     }
   } catch (err) {
     forgotError.value =
       err.response?.data?.message ||
-      "ইমেইল পাঠাতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।";
+      "Failed to send email. Please try again.";
     showToast({
-      title: "ত্রুটি",
+      title: "Error",
       message:
         err.response?.data?.message ||
-        "ইমেইল পাঠাতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        "Failed to send email. Please try again.",
       type: "error",
     });
   } finally {

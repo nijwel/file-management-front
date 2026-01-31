@@ -27,10 +27,8 @@
             />
           </svg>
         </div>
-        <h1 class="text-3xl font-bold text-white mb-2">
-          নতুন অ্যাকাউন্ট তৈরি করুন
-        </h1>
-        <p class="text-gray-400">ফাইল ম্যানেজমেন্ট সিস্টেমে যোগ দিন</p>
+        <h1 class="text-3xl font-bold text-white mb-2">Create a new account</h1>
+        <p class="text-gray-400">Join the file management system</p>
       </div>
 
       <!-- Registration Form Card -->
@@ -39,14 +37,14 @@
           <!-- Name Input -->
           <div>
             <label class="block text-sm font-semibold text-gray-900 mb-2">
-              ফার্স্ট নেম
+              First name
             </label>
             <input
               id="first_name"
               v-model="formData.firstName"
               type="text"
               required
-              placeholder="আপনার পুরো নাম লিখুন"
+              placeholder="Enter your full name"
               class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
               :class="{ 'border-red-500': errors.firstName }"
             />
@@ -57,14 +55,14 @@
 
           <div>
             <label class="block text-sm font-semibold text-gray-900 mb-2">
-              লাস্ট নেম
+              Last name
             </label>
             <input
               id="last_name"
               v-model="formData.lastName"
               type="text"
               required
-              placeholder="আপনার পুরো নাম লিখুন"
+              placeholder="Enter your full name"
               class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
               :class="{ 'border-red-500': errors.lastName }"
             />
@@ -76,7 +74,7 @@
           <!-- Email Input -->
           <div>
             <label class="block text-sm font-semibold text-gray-900 mb-2">
-              ইমেইল ঠিকানা
+              Email address
             </label>
             <input
               id="email"
@@ -95,7 +93,7 @@
           <!-- Password Input -->
           <div>
             <label class="block text-sm font-semibold text-gray-900 mb-2">
-              পাসওয়ার্ড
+              Password
             </label>
             <input
               id="password"
@@ -115,7 +113,7 @@
           <!-- Confirm Password Input -->
           <div>
             <label class="block text-sm font-semibold text-gray-900 mb-2">
-              পাসওয়ার্ড নিশ্চিত করুন
+              Confirm password
             </label>
             <input
               id="password_confirmation"
@@ -163,20 +161,20 @@
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                একটু অপেক্ষা করুন...
+                Please wait...
               </span>
-              <span v-else>নিবন্ধন করুন</span>
+              <span v-else>Register</span>
             </button>
           </div>
 
           <!-- Login Link -->
           <div class="text-center text-sm text-gray-600">
-            ইতিমধ্যে একটি অ্যাকাউন্ট আছে?
+            Already have an account?
             <router-link
               to="/"
               class="font-semibold text-gray-900 hover:text-gray-700"
             >
-              লগইন করুন
+              Log in
             </router-link>
           </div>
         </form>
@@ -184,7 +182,7 @@
 
       <!-- Footer -->
       <div class="mt-8 text-center text-sm text-gray-400">
-        <p>নিরাপদ নিবন্ধন। আপনার ডেটা সুরক্ষিত।</p>
+        <p>Secure registration. Your data is protected.</p>
       </div>
     </div>
   </div>
@@ -230,13 +228,12 @@
           </div>
           <div class="mt-3 text-center sm:mt-5">
             <h3 class="text-lg leading-6 font-medium text-gray-900">
-              নিবন্ধন সফল!
+              Registration successful!
             </h3>
             <div class="mt-2">
               <p class="text-sm text-gray-500">
-                আপনার ইমেইল ঠিকানায় একটি ভেরিফিকেশন লিংক পাঠানো হয়েছে। অনুগ্রহ
-                করে আপনার ইমেইল চেক করুন এবং অ্যাকাউন্টটি সক্রিয় করতে লিংকে
-                ক্লিক করুন।
+                A verification link has been sent to your email. Please check
+                your inbox and click the link to activate your account.
               </p>
             </div>
           </div>
@@ -247,7 +244,7 @@
             @click="showSuccessModal = false"
             class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
           >
-            ঠিক আছে
+            OK
           </button>
         </div>
       </div>
@@ -279,23 +276,23 @@ const validateForm = () => {
   const newErrors = {};
 
   if (!formData.value.firstName) {
-    newErrors.name = "ফার্স্ট নাম প্রয়োজন";
+    newErrors.name = "First name is required";
   }
 
   if (!formData.value.email) {
-    newErrors.email = "ইমেইল প্রয়োজন";
+    newErrors.email = "Email is required";
   } else if (!/\S+@\S+\.\S+/.test(formData.value.email)) {
-    newErrors.email = "সঠিক ইমেইল ঠিকানা দিন";
+    newErrors.email = "Enter a valid email address";
   }
 
   if (!formData.value.password) {
-    newErrors.password = "পাসওয়ার্ড প্রয়োজন";
+    newErrors.password = "Password is required";
   } else if (formData.value.password.length < 8) {
-    newErrors.password = "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে";
+    newErrors.password = "Password must be at least 8 characters";
   }
 
   if (formData.value.password !== formData.value.password_confirmation) {
-    newErrors.password_confirmation = "পাসওয়ার্ড মিলছে না";
+    newErrors.password_confirmation = "Passwords do not match";
   }
 
   errors.value = newErrors;
@@ -324,8 +321,8 @@ const register = async () => {
 
       // Show success toast
       showToast({
-        title: "সফল",
-        message: "নিবন্ধন সফল হয়েছে! অনুগ্রহ করে আপনার ইমেইল যাচাই করুন।",
+        title: "Success",
+        message: "Registration successful! Please verify your email.",
         type: "success",
       });
 
@@ -340,10 +337,10 @@ const register = async () => {
       errors.value = error.response.data.errors;
     } else {
       showToast({
-        title: "নিবন্ধন ব্যর্থ",
+        title: "Registration failed",
         message:
           error.response?.data?.message ||
-          "নিবন্ধন করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+          "Registration failed. Please try again.",
         type: "error",
       });
     }

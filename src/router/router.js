@@ -10,17 +10,17 @@ const routes = [
   {
     path: "/",
     component: Login,
-    meta: { title: "লগইন" },
+    meta: { title: "Login" },
   },
   {
     path: "/register",
     component: () => import("../pages/auth/Register.vue"),
-    meta: { title: "নতুন অ্যাকাউন্ট তৈরি করুন" },
+    meta: { title: "Create new account" },
   },
   {
     path: "/login/reset-password",
     component: ResetPassword,
-    meta: { title: "পাসওয়ার্ড রিসেট" },
+    meta: { title: "Reset password" },
   },
   {
     path: "/verify-email",
@@ -29,7 +29,7 @@ const routes = [
       token: route.query.token,
       email: route.query.email,
     }),
-    meta: { title: "ইমেইল ভেরিফিকেশন" },
+    meta: { title: "Email verification" },
     alias: "/email/verification",
   },
   {

@@ -8,7 +8,7 @@
       <div
         class="w-12 h-12 border-4 border-gray-200 border-t-gray-900 rounded-full animate-spin mx-auto"
       ></div>
-      <p class="mt-4 text-gray-600">লোডিং হচ্ছে...</p>
+      <p class="mt-4 text-gray-600">Loading...</p>
     </div>
   </div>
 
@@ -20,8 +20,8 @@
       <!-- Header -->
       <div class="bg-white border-b">
         <div class="px-8 py-6">
-          <h1 class="text-3xl font-bold">ড্যাশবোর্ড</h1>
-          <p class="text-gray-600 mt-1">আপনার ফাইল ম্যানেজমেন্ট সিস্টেম</p>
+          <h1 class="text-3xl font-bold">Dashboard</h1>
+          <p class="text-gray-600 mt-1">Your file management system</p>
         </div>
       </div>
 
@@ -48,24 +48,24 @@
         <!-- Stats -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="bg-white p-4 rounded-xl border border-gray-200">
-            <p class="text-gray-500 text-sm">প্রোফাইল স্ট্যাটাস</p>
-            <p class="text-2xl font-bold mt-2">সক্রিয়</p>
+            <p class="text-gray-500 text-sm">Profile Status</p>
+            <p class="text-2xl font-bold mt-2">Active</p>
           </div>
 
           <div class="bg-white p-4 rounded-xl border border-gray-200">
-            <p class="text-gray-500 text-sm">শেষ লগইন</p>
-            <p class="text-2xl font-bold mt-2">আজ</p>
+            <p class="text-gray-500 text-sm">Last Login</p>
+            <p class="text-2xl font-bold mt-2">Today</p>
           </div>
 
           <div class="bg-white p-4 rounded-xl border border-gray-200">
-            <p class="text-gray-500 text-sm">অ্যাকাউন্ট ধরন</p>
-            <p class="text-2xl font-bold mt-2">প্রিমিয়াম</p>
+            <p class="text-gray-500 text-sm">Account Type</p>
+            <p class="text-2xl font-bold mt-2">Premium</p>
           </div>
         </div>
 
         <!-- Details -->
         <div class="bg-white p-6 rounded-xl border border-gray-200">
-          <h3 class="text-xl font-bold mb-4">ব্যবহারকারীর বিস্তারিত</h3>
+          <h3 class="text-xl font-bold mb-4">User Details</h3>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div>
@@ -74,17 +74,17 @@
             </div>
 
             <div>
-              <p class="text-sm text-gray-500">ইমেইল</p>
+              <p class="text-sm text-gray-500">Email</p>
               <p class="font-semibold">{{ user.email }}</p>
             </div>
 
             <div>
-              <p class="text-sm text-gray-500">ফোন</p>
+              <p class="text-sm text-gray-500">Phone</p>
               <p class="font-semibold">{{ user.phone || "N/A" }}</p>
             </div>
 
             <div>
-              <p class="text-sm text-gray-500">ভূমিকা</p>
+              <p class="text-sm text-gray-500">Role</p>
               <p class="font-semibold">{{ user.role_id || "User" }}</p>
             </div>
           </div>
@@ -92,21 +92,21 @@
 
         <!-- Actions -->
         <div class="bg-white p-6 rounded-xl border border-gray-200">
-          <h3 class="text-xl font-bold mb-4">দ্রুত অ্যাকশন</h3>
+          <h3 class="text-xl font-bold mb-4">Quick Actions</h3>
 
           <div class="grid md:grid-cols-2 gap-4">
             <router-link
               to="/file-manager"
               class="p-4 border rounded-lg border-gray-200 hover:bg-gray-900 hover:text-white transition"
             >
-              📁 ফাইল ম্যানেজার
+              📁 File Manager
             </router-link>
 
             <router-link
               to="/profile"
               class="p-4 border rounded-lg border-gray-200 hover:bg-gray-900 hover:text-white transition"
             >
-              ⚙️ প্রোফাইল সেটিংস
+              ⚙️ Profile Settings
             </router-link>
           </div>
         </div>
@@ -124,12 +124,12 @@
       >
         <!-- Title -->
         <h3 class="text-xl font-bold mb-3 text-red-600">
-          ইমেইল ভেরিফিকেশন প্রয়োজন
+          Email verification required
         </h3>
 
         <!-- Description -->
         <p class="text-gray-700 mb-6">
-          ড্যাশবোর্ড ব্যবহার করতে হলে আপনাকে ইমেইল ভেরিফাই করতে হবে।
+          You must verify your email to use the dashboard.
         </p>
 
         <!-- Buttons -->
@@ -139,7 +139,7 @@
             @click="logout"
             class="px-4 py-2 border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-100 transition"
           >
-            লগআউট
+            Logout
           </button>
 
           <!-- Resend -->
@@ -148,7 +148,7 @@
             :disabled="resendLoading"
             class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-black disabled:opacity-50 transition"
           >
-            {{ resendLoading ? "পাঠানো হচ্ছে..." : "পুনরায় পাঠান" }}
+            {{ resendLoading ? "Sending..." : "Resend" }}
           </button>
         </div>
       </div>
@@ -186,7 +186,7 @@ onMounted(async () => {
 });
 
 const fullName = computed(() => {
-  if (!user.value.first_name) return "ব্যবহারকারী";
+  if (!user.value.first_name) return "User";
   return (
     user.value.first_name +
     (user.value.last_name ? " " + user.value.last_name : "")
@@ -204,10 +204,10 @@ const resendVerificationEmail = async () => {
 
     console.log(res);
     if (res.data.status === 200) {
-      successMessage.value = "✓ ইমেইল ভেরিফিকেশন পাঠানো হয়েছে।";
+      successMessage.value = "✓ Verification email sent.";
       showToast({
-        title: "সফল",
-        message: "ইমেইল ভেরিফিকেশন পাঠানো হয়েছে।",
+        title: "Success",
+        message: "Verification email sent.",
         type: "success",
       });
     }

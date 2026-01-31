@@ -23,8 +23,8 @@
               </svg>
             </div>
             <div>
-              <h2 class="text-2xl font-bold text-gray-900">প্রোফাইল আপডেট</h2>
-              <p class="text-gray-600">আপনার নাম এবং ইমেইল আপডেট করুন</p>
+              <h2 class="text-2xl font-bold text-gray-900">Update Profile</h2>
+              <p class="text-gray-600">Update your name and email</p>
             </div>
           </div>
         </div>
@@ -38,29 +38,29 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-sm font-semibold text-gray-900 mb-2"
-                    >ফার্স্ট নেম</label
+                    >First name</label
                   >
                   <input
                     v-model.trim="firstName"
                     type="text"
-                    placeholder="নাম"
+                    placeholder="Name"
                     class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
                   />
                 </div>
                 <div>
                   <label class="block text-sm font-semibold text-gray-900 mb-2"
-                    >লাস্ট নেম</label
+                    >Last name</label
                   >
                   <input
                     v-model.trim="lastName"
                     type="text"
-                    placeholder="শেষ নাম (ঐচ্ছিক)"
+                    placeholder="Last name (optional)"
                     class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
                   />
                 </div>
                 <div>
                   <label class="block text-sm font-semibold text-gray-900 mb-2"
-                    >ইমেইল</label
+                    >Email</label
                   >
                   <input
                     v-model.trim="email"
@@ -69,12 +69,12 @@
                     class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
                   />
                   <p class="text-xs text-gray-500 mt-1">
-                    আপডেট করার পর লগইন ইমেইল একই থাকবে।
+                    Login email remains the same after update.
                   </p>
                 </div>
                 <div>
                   <label class="block text-sm font-semibold text-gray-900 mb-2"
-                    >ফোন নম্বর</label
+                    >Phone number</label
                   >
                   <input
                     v-model.trim="phone"
@@ -111,24 +111,24 @@
           <!-- Current Info -->
           <div>
             <div class="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 class="text-lg font-bold text-gray-900 mb-4">বর্তমান তথ্য</h3>
+              <h3 class="text-lg font-bold text-gray-900 mb-4">Current info</h3>
               <div class="space-y-3">
                 <div class="border-l-4 border-gray-300 pl-4 py-2">
-                  <p class="text-sm text-gray-600 font-semibold">
-                    সম্পূর্ণ নাম
-                  </p>
+                  <p class="text-sm text-gray-600 font-semibold">Full name</p>
                   <p class="text-lg font-bold text-gray-900 mt-1">
                     {{ firstName }} {{ lastName }}
                   </p>
                 </div>
                 <div class="border-l-4 border-gray-300 pl-4 py-2">
-                  <p class="text-sm text-gray-600 font-semibold">ফোন নম্বর</p>
+                  <p class="text-sm text-gray-600 font-semibold">
+                    Phone number
+                  </p>
                   <p class="text-lg font-bold text-gray-900 mt-1">
-                    {{ phone || "নির্ধারিত নয়" }}
+                    {{ phone || "Not set" }}
                   </p>
                 </div>
                 <div class="border-l-4 border-gray-300 pl-4 py-2">
-                  <p class="text-sm text-gray-600 font-semibold">ইমেইল</p>
+                  <p class="text-sm text-gray-600 font-semibold">Email</p>
                   <p class="text-lg font-bold text-gray-900 mt-1">
                     {{ email }}
                   </p>
@@ -145,12 +145,12 @@
               <!-- Password Update Fields -->
               <div class="relative">
                 <label class="block text-sm font-semibold text-gray-900 mb-2"
-                  >বর্তমান পাসওয়ার্ড</label
+                  >Current password</label
                 >
                 <input
                   :type="showCurrentPassword ? 'text' : 'password'"
                   v-model.trim="currentPassword"
-                  placeholder="বর্তমান পাসওয়ার্ড"
+                  placeholder="Current password"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all pr-10"
                 />
                 <button
@@ -206,12 +206,12 @@
               <!-- New Password -->
               <div class="relative">
                 <label class="block text-sm font-semibold text-gray-900 mb-2"
-                  >নতুন পাসওয়ার্ড</label
+                  >New password</label
                 >
                 <input
                   :type="showNewPassword ? 'text' : 'password'"
                   v-model.trim="newPassword"
-                  placeholder="নতুন পাসওয়ার্ড"
+                  placeholder="New password"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all pr-10"
                 />
                 <button
@@ -267,12 +267,12 @@
               <!-- Confirm Password -->
               <div class="relative">
                 <label class="block text-sm font-semibold text-gray-900 mb-2"
-                  >পুনরায় পাসওয়ার্ড</label
+                  >Confirm password</label
                 >
                 <input
                   :type="showConfirmPassword ? 'text' : 'password'"
                   v-model.trim="confirmPassword"
-                  placeholder="পুনরায় পাসওয়ার্ড লিখুন"
+                  placeholder="Confirm your password"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all pr-10"
                 />
                 <button
@@ -341,8 +341,8 @@
                       d="M4 12a1 1 0 011-1h3V8a1 1 0 112 0v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H5a1 1 0 01-1-1z"
                     />
                   </svg>
-                  <span v-if="isLoading">আপডেট হচ্ছে...</span>
-                  <span v-else>আপডেট করুন</span>
+                  <span v-if="isLoading">Updating...</span>
+                  <span v-else>Update</span>
                 </button>
               </div>
             </div>
@@ -398,9 +398,9 @@ const passwordFormValid = computed(() => {
 // Password error message
 const passwordError = computed(() => {
   if (!newPassword.value || !confirmPassword.value)
-    return "নতুন পাসওয়ার্ড এবং কনফার্ম পাসওয়ার্ড অবশ্যই দিতে হবে।";
+    return "New password and confirm password are required.";
   if (newPassword.value !== confirmPassword.value)
-    return "নতুন পাসওয়ার্ড এবং কনফার্ম পাসওয়ার্ড মেলছে না।";
+    return "New password and confirm password do not match.";
   return "";
 });
 
@@ -420,8 +420,8 @@ onMounted(async () => {
 const updateProfile = async () => {
   if (!formValid.value) {
     showToast({
-      title: "ত্রুটি",
-      message: "ফার্স্ট নেম এবং সঠিক ইমেইল দিন।",
+      title: "Error",
+      message: "Please provide first name and a valid email.",
       type: "error",
     });
     return;
@@ -436,15 +436,15 @@ const updateProfile = async () => {
     });
     if (res.status === 200)
       showToast({
-        title: "সফল",
-        message: "প্রোফাইল আপডেট সম্পন্ন।",
+        title: "Success",
+        message: "Profile updated successfully.",
         type: "success",
       });
   } catch (err) {
     console.error(err);
     showToast({
-      title: "ত্রুটি",
-      message: err.response?.data?.message || "প্রোফাইল আপডেট ব্যর্থ।",
+      title: "Error",
+      message: err.response?.data?.message || "Profile update failed.",
       type: "error",
     });
   } finally {
@@ -466,15 +466,15 @@ const updatePassword = async () => {
     confirmPassword.value = "";
 
     showToast({
-      title: "সফল",
-      message: "পাসওয়ার্ড আপডেট সম্পন্ন।",
+      title: "Success",
+      message: "Password updated successfully.",
       type: "success",
     });
   } catch (err) {
     console.error(err);
     showToast({
-      title: "ত্রুটি",
-      message: err.response?.data?.message || "পাসওয়ার্ড আপডেট ব্যর্থ।",
+      title: "Error",
+      message: err.response?.data?.message || "Password update failed.",
       type: "error",
     });
   } finally {

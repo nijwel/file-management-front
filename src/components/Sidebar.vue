@@ -20,7 +20,7 @@
         </div>
         <div>
           <h3 class="font-bold text-gray-900">FileHub</h3>
-          <p class="text-xs text-gray-600">ম্যানেজার</p>
+          <p class="text-xs text-gray-600">Manager</p>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
             d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
           />
         </svg>
-        <span>হোম</span>
+        <span>Home</span>
       </router-link>
 
       <!-- Profile -->
@@ -64,7 +64,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        <span>প্রোফাইল</span>
+        <span>Profile</span>
       </router-link>
 
       <!-- File Manager -->
@@ -83,7 +83,7 @@
             d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM4 9a1 1 0 100 2h8a1 1 0 100-2H4z"
           />
         </svg>
-        <span>ফাইল ম্যানেজার</span>
+        <span>File Manager</span>
       </router-link>
 
       <!-- Settings -->
@@ -103,7 +103,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        <span>সেটিংস</span>
+        <span>Settings</span>
       </button>
 
       <!-- Analytics -->
@@ -121,7 +121,7 @@
             d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
           />
         </svg>
-        <span>বিশ্লেষণ</span>
+        <span>Analytics</span>
       </button>
 
       <!-- Messages -->
@@ -140,7 +140,7 @@
           />
           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
         </svg>
-        <span>বার্তা</span>
+        <span>Messages</span>
         <span
           v-if="activeMenu !== 'messages'"
           class="ml-auto bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
@@ -165,7 +165,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        <span>সাহায্য</span>
+        <span>Help</span>
       </button>
     </nav>
 
@@ -187,7 +187,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        <span>লগআউট</span>
+        <span>Logout</span>
       </button>
     </div>
   </div>
@@ -212,7 +212,7 @@ watch(
       activeMenu.value = "files";
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 defineEmits(["logout"]);
